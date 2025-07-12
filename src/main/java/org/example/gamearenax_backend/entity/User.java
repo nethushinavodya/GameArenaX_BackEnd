@@ -22,6 +22,9 @@ public class User {
     private UUID uuid;
     private String email;
     private String password;
-    private String name;
+    private String username;
     private String role;
+    private String country;
+    private String profilePicture;
+    private String status;
 }
