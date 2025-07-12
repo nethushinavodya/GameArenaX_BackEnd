@@ -17,4 +17,9 @@ public class UserDTO {
     private String country;
     private String profilePicture;
     private String status;
+
+    public UserDTO(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 }
