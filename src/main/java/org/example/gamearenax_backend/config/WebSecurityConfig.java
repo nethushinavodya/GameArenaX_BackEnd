@@ -54,6 +54,7 @@ public class WebSecurityConfig {
                                 "/api/v1/auth/authenticate",
                                 "/api/v1/games/*",
                                 "/api/v1/games/get/*",
+                                "/api/v1/password/*",
                                 "/api/v1/user/register",
                                 "/api/v1/auth/refreshToken",
                                 "/v3/api-docs/",

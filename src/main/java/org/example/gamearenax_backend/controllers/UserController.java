@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/user")
+@CrossOrigin
 public class UserController {
     private final UserServiceImpl userServiceImpl;
     private JwtUtil jwtUtil;
@@ -50,9 +51,14 @@ public class UserController {
         }
 
     }
-    @GetMapping("/get")
-    public String get(){
-        return "hello";
+    @GetMapping("/getAll")
+    public ResponseEntity<ResponseDTO> getAllUsers(){
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", userServiceImpl.getAllUsers()));
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
 }

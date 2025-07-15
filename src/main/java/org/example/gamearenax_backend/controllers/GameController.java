@@ -2,7 +2,7 @@ package org.example.gamearenax_backend.controllers;
 
 import org.example.gamearenax_backend.dto.GameDTO;
 import org.example.gamearenax_backend.dto.ResponseDTO;
-import org.example.gamearenax_backend.service.impl.GameServiceImpl;
+import org.example.gamearenax_backend.service.GameService;
 import org.example.gamearenax_backend.util.VarList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 public class GameController {
     @Autowired
-    private GameServiceImpl gameServiceImpl;
+    private GameService gameService;
 
     @GetMapping("/AllGames")
     public ResponseEntity<ResponseDTO> getAllGames(){
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", gameServiceImpl.getAllGames()));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", gameService.getAllGames()));
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
@@ -29,7 +29,7 @@ public class GameController {
     @PostMapping("/save")
     public ResponseEntity<ResponseDTO> saveGame(@RequestBody GameDTO gameDTO){
         try {
-            int res = gameServiceImpl.saveGame(gameDTO);
+            int res = gameService.saveGame(gameDTO);
             switch (res){
                 case VarList.Created -> {
                     return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", null));
@@ -50,7 +50,7 @@ public class GameController {
     @PutMapping("/update")
     public ResponseEntity<ResponseDTO> updateGame(@RequestBody GameDTO gameDTO){
         try {
-            int res = gameServiceImpl.updateGame(gameDTO);
+            int res = gameService.updateGame(gameDTO);
             switch (res){
                 case VarList.Created -> {
                     return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", null));
@@ -67,7 +67,7 @@ public class GameController {
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseDTO> deleteGame(@RequestParam String name){
         try {
-            int res = gameServiceImpl.deleteGame(name);
+            int res = gameService.deleteGame(name);
             switch (res){
                 case VarList.Created -> {
                     return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", null));
@@ -85,7 +85,7 @@ public class GameController {
     @GetMapping("/getByName")
     public ResponseEntity<ResponseDTO> getGameByName(@RequestParam String name){
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", gameServiceImpl.getGameByName(name)));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", gameService.getGameByName(name)));
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
@@ -95,7 +95,7 @@ public class GameController {
     @GetMapping("/getByActive")
     public ResponseEntity<ResponseDTO> getGameByActive(@RequestParam String isActive){
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", gameServiceImpl.getGameByActive(isActive)));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", gameService.getGameByActive(isActive)));
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());

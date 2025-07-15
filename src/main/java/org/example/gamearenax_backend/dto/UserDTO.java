@@ -19,7 +19,7 @@ public class UserDTO {
     private String status;
 
     public UserDTO(String email, String password) {
-        this.email = email;
+        this.email = email; 
         this.password = password;
     }
 }
