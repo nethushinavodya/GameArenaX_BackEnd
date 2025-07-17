@@ -3,6 +3,7 @@ package org.example.gamearenax_backend.service.impl;
 import org.example.gamearenax_backend.dto.UserDTO;
 import org.example.gamearenax_backend.entity.User;
 import org.example.gamearenax_backend.repository.UserRepo;
+import org.example.gamearenax_backend.service.UserService;
 import org.example.gamearenax_backend.util.VarList;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class UserServiceImpl implements UserDetailsService {
+public class UserServiceImpl implements UserDetailsService, UserService {
     @Autowired
     private UserRepo userRepo;
 

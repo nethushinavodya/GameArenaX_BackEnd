@@ -3,6 +3,7 @@ package org.example.gamearenax_backend.controllers;
 import org.example.gamearenax_backend.dto.AuthDTO;
 import org.example.gamearenax_backend.dto.ResponseDTO;
 import org.example.gamearenax_backend.dto.UserDTO;
+import org.example.gamearenax_backend.service.UserService;
 import org.example.gamearenax_backend.service.impl.UserServiceImpl;
 import org.example.gamearenax_backend.util.JwtUtil;
 import org.example.gamearenax_backend.util.VarList;
@@ -14,18 +15,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/v1/user")
 @CrossOrigin
 public class UserController {
-    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
     private JwtUtil jwtUtil;
 
-    public UserController(UserServiceImpl userServiceImpl, JwtUtil jwtUtil) {
-        this.userServiceImpl = userServiceImpl;
+    public UserController(UserService userService, JwtUtil jwtUtil) {
+        this.userService = userService;
         this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/register")
     public ResponseEntity<ResponseDTO> registerUser(@RequestBody UserDTO userDTO) {
         try {
-            int res = userServiceImpl.saveUser(userDTO);
+            int res = userService.saveUser(userDTO);
 
             switch (res){
                 case VarList.Created -> {
@@ -54,7 +55,7 @@ public class UserController {
     @GetMapping("/getAll")
     public ResponseEntity<ResponseDTO> getAllUsers(){
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", userServiceImpl.getAllUsers()));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", userService.getAllUsers()));
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
