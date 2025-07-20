@@ -1,5 +1,7 @@
 package org.example.gamearenax_backend.controllers;
 
+import jakarta.annotation.security.PermitAll;
+import jakarta.servlet.http.HttpServletRequest;
 import org.example.gamearenax_backend.dto.AuthDTO;
 import org.example.gamearenax_backend.dto.ResponseDTO;
 import org.example.gamearenax_backend.dto.UserDTO;
@@ -24,12 +26,16 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseDTO> registerUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<ResponseDTO> registerUser(@RequestBody UserDTO userDTO, HttpServletRequest request) {
         try {
             int res = userService.saveUser(userDTO);
 
             switch (res){
                 case VarList.Created -> {
+                    request.getSession().setAttribute("email", userDTO.getEmail());
+                    request.getSession().setAttribute("role", userDTO.getRole());
+                    System.out.println(request.getSession().getAttribute("email"));
+                    System.out.println(request.getSession().getAttribute("role")+ "kkkkkkkk");
                     String token = jwtUtil.generateToken(userDTO);
                     AuthDTO authDTO = new AuthDTO();
                     authDTO.setEmail(userDTO.getEmail());
@@ -52,6 +58,7 @@ public class UserController {
         }
 
     }
+
     @GetMapping("/getAll")
     public ResponseEntity<ResponseDTO> getAllUsers(){
         try {
@@ -61,5 +68,22 @@ public class UserController {
             throw new RuntimeException(e.getMessage());
         }
     }
-
+    @PutMapping("/update")
+    public ResponseEntity<ResponseDTO> updateUser(@RequestBody UserDTO userDTO){
+        try {
+            System.out.println(userDTO.getCountry() + " " + userDTO.getUsername());
+            int res = userService.updateUser(userDTO);
+            switch (res){
+                case VarList.Created -> {
+                    return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", null));
+                }
+                default -> {
+                    return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new ResponseDTO(VarList.Bad_Request, "Error", null));
+                }
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 }

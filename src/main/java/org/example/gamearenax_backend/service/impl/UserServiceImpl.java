@@ -1,5 +1,6 @@
 package org.example.gamearenax_backend.service.impl;
 
+import jakarta.transaction.Transactional;
 import org.example.gamearenax_backend.dto.UserDTO;
 import org.example.gamearenax_backend.entity.User;
 import org.example.gamearenax_backend.repository.UserRepo;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserDetailsService, UserService {
     @Autowired
     private UserRepo userRepo;
@@ -56,6 +58,22 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public List<UserDTO> getAllUsers() {
         List<User> users = userRepo.findAll();
         return modelMapper.map(users,new TypeToken<List<User>>(){}.getType());
+    }
+
+    @Override
+    public int updateUser(UserDTO userDTO) {
+       try {
+           System.out.println(userDTO.getUsername() + " " + userDTO.getCountry() + " " + userDTO.getRole());
+           userRepo.updateUser(userDTO.getEmail(), userDTO.getRole(), userDTO.getCountry(),userDTO.getUsername());
+           return VarList.Created;
+       }catch (Exception e){
+           throw new RuntimeException(e.getMessage());
+       }
+    }
+
+    @Override
+    public User SearchByEmail(String email) {
+        return userRepo.findByEmail(email);
     }
 
     public boolean ifEmailExists(String email) {

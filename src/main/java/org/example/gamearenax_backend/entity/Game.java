@@ -17,12 +17,16 @@ public class Game {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID gameId;
-    @Column(unique = true)
+    @Column(name = "name", unique = true)
     private String name;
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
+    @Column(name = "genre")
     private String genre;
+    @Column(name = "logo_url")
     private String logoUrl;
+    @Column(name = "platform")
     private String platform;
+    @Column(name = "is_active")
     private String isActive;
 }
