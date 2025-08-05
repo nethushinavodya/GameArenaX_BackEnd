@@ -1,0 +1,42 @@
+package org.example.gamearenax_backend.service.impl;
+
+import jakarta.transaction.Transactional;
+import org.example.gamearenax_backend.dto.PlayerDTO;
+import org.example.gamearenax_backend.entity.Player;
+import org.example.gamearenax_backend.entity.User;
+import org.example.gamearenax_backend.repository.PlayerRepo;
+import org.example.gamearenax_backend.repository.UserRepo;
+import org.example.gamearenax_backend.service.PlayerService;
+import org.example.gamearenax_backend.util.VarList;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+@Transactional
+public class PlayerServiceImpl implements PlayerService {
+    @Autowired
+    private UserRepo userRepo;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private PlayerRepo playerRepo;
+    @Override
+    public int addPlayer(PlayerDTO playerDTO, User user) {
+        try {
+            if(userRepo.existsByEmail(playerDTO.getEmail())) {
+                Player player = modelMapper.map(playerDTO, Player.class);
+                player.setUser(user);
+                playerRepo.save(player);
+                userRepo.updatePlayerRole(playerDTO.getEmail(), "Player");
+                return VarList.Created;
+            } else {
+                return VarList.Not_Acceptable;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+}

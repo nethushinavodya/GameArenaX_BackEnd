@@ -10,7 +10,6 @@ public interface StreamerService {
 
     Object getAllStreamers();
 
-
     Object getStreamerByEmail(String email);
 
     Object deleteStreamer(String email);

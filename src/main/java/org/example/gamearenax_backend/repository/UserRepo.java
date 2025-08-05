@@ -22,4 +22,8 @@ public interface UserRepo extends JpaRepository<User, String> {
     @Modifying
     @Query(value = "UPDATE User u SET u.status = 'Deactivated' WHERE u.email = ?1", nativeQuery = true)
     void updateIsActive(String email);
+
+    @Modifying
+    @Query(value = "UPDATE User u SET u.role = 'Player' WHERE u.email = ?1", nativeQuery = true)
+    void updatePlayerRole(String email, String player);
 }

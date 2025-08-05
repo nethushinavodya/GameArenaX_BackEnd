@@ -7,7 +7,7 @@ public interface GameService {
 
     Object getAllGames();
 
-    int updateGame(GameDTO gameDTO);
+    int updateGame(GameDTO gameDTO);  
 
     int deleteGame(String name);
 
