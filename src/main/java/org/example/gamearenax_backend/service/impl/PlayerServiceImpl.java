@@ -88,4 +88,34 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
+    @Override
+    public Object updateIsLive(String email) {
+        try {
+            if (playerRepo.existsByEmail(email)){
+                playerRepo.updateIsLive(email);
+                return VarList.Created;
+            }else {
+                return "Player Not Found";
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public Object updateIsLiveFalse(String email) {
+        try {
+            if (playerRepo.existsByEmail(email)){
+                playerRepo.updateIsLiveFalse(email);
+                return VarList.Created;
+            }else {
+                return "Player Not Found";
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
 }
