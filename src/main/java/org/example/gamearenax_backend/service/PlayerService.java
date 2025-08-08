@@ -13,4 +13,8 @@ public interface PlayerService {
     Object getPlayerByEmail(String email);
 
     int updatePlayer(PlayerDTO playerDTO);
+
+    Object updateIsLive(String email);
+
+    Object updateIsLiveFalse(String email);
 }
