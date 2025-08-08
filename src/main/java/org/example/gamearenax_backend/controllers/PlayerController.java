@@ -127,4 +127,24 @@ public class PlayerController {
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    @PutMapping("/updateIsLive")
+    public ResponseEntity<ResponseDTO> updateByOnline(@RequestParam String email){
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created,"Success",playerService.updateIsLive(email)));
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @PatchMapping("/updateIsLiveFalse")
+    public ResponseEntity<ResponseDTO> updateByOnlineFalse(@RequestParam String email){
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created,"Success",playerService.updateIsLiveFalse(email)));
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 }
