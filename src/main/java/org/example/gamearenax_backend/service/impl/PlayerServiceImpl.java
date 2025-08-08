@@ -12,6 +12,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class PlayerServiceImpl implements PlayerService {
@@ -39,4 +41,51 @@ public class PlayerServiceImpl implements PlayerService {
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    @Override
+    public Object getAllPlayers() {
+        try {
+            return playerRepo.findAll();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public Object getByOnline() {
+        try {
+            List<Player> players = playerRepo.findByOnline(true);
+            if (players.isEmpty()) {
+                return "No players are online";
+            } else {
+                return players;
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public Object getPlayerByEmail(String email) {
+        try {
+            return playerRepo.findByEmail(email);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public int updatePlayer(PlayerDTO playerDTO) {
+        try {
+            playerRepo.updatePlayer(playerDTO.getPlayerName(), playerDTO.getCountry(), playerDTO.getAbout(),playerDTO.getTotalMatches(), playerDTO.getWins(), playerDTO.getRank(), playerDTO.getEmail());
+            return VarList.Created;
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
 }

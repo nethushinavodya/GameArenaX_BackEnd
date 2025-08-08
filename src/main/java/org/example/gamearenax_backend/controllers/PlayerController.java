@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/player")
+@CrossOrigin
 public class PlayerController {
 
     private final JwtUtil jwtUtil;
@@ -71,6 +72,54 @@ public class PlayerController {
                 default -> {
                     return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
                             .body(new ResponseDTO(VarList.Bad_Request, "Error", null));
+                }
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @GetMapping("/getAllPlayers")
+    public ResponseEntity<ResponseDTO> getAllPlayers() {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", playerService.getAllPlayers()));
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @GetMapping("/getByOnline")
+    public ResponseEntity<ResponseDTO> getByOnline() {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", playerService.getByOnline()));
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @GetMapping("/getByEmail")
+    public ResponseEntity<ResponseDTO> getPlayerByEmail(@RequestParam String email) {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", playerService.getPlayerByEmail(email)));
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @PutMapping("/updatePlayer")
+    public ResponseEntity<ResponseDTO> updatePlayer(@RequestBody PlayerDTO playerDTO) {
+        try {
+            int res = playerService.updatePlayer(playerDTO);
+            switch (res) {
+                case VarList.Created -> {
+                    return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", null));
+                }
+                default -> {
+                    return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new ResponseDTO(VarList.Bad_Request, "Error", null));
                 }
             }
         } catch (RuntimeException e) {

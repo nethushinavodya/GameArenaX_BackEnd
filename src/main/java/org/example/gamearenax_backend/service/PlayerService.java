@@ -5,4 +5,12 @@ import org.example.gamearenax_backend.entity.User;
 
 public interface PlayerService {
     int addPlayer(PlayerDTO playerDTO, User user);
+
+    Object getAllPlayers();
+
+    Object getByOnline();
+
+    Object getPlayerByEmail(String email);
+
+    int updatePlayer(PlayerDTO playerDTO);
 }
