@@ -4,8 +4,12 @@ import org.example.gamearenax_backend.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
-public interface UserRepo extends JpaRepository<User, String> {
+import java.util.UUID;
+
+@Repository
+public interface UserRepo extends JpaRepository<User, UUID> {
     boolean existsByEmail(String email);
 
     User findByEmail(String email);
