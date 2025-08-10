@@ -4,13 +4,17 @@ import org.example.gamearenax_backend.entity.Player;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
-public interface PlayerRepo extends JpaRepository<Player, String> {
-    List<Player> findByOnline(boolean b);
+@Repository
+public interface PlayerRepo extends JpaRepository<Player, UUID> {
+    List<Player> findByIsOnline(boolean isOnline);
 
-    Object findByEmail(String email);
+    Optional<Player> findByEmail(String email);
 
     @Modifying
     @Query(value = "UPDATE Player p SET p.player_name = ?1, p.country = ?2, p.about = ?3, p.total_matches = ?4, p.wins = ?5, p.rank = ?6 WHERE p.email = ?7", nativeQuery = true)
@@ -25,4 +29,5 @@ public interface PlayerRepo extends JpaRepository<Player, String> {
     @Modifying
     @Query(value = "UPDATE Player s SET s.is_online  = false WHERE s.email = ?1", nativeQuery = true)
     void updateIsLiveFalse(String email);
+
 }
