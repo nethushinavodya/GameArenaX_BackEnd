@@ -13,5 +13,7 @@ public interface GameService {
 
     Object getGameByName(String name);
 
-    Object getGameByActive(String isActive);
+    Object getGameByActive();
+
+    int setActiveTrue(String name);
 }

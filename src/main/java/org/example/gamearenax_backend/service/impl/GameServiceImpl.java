@@ -11,10 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.beans.Transient;
+import java.util.List;
 import java.util.Optional;
 
 @Service
-
+@Transactional
 public class GameServiceImpl implements GameService {
     @Autowired
     private GameRepo gameRepo;
@@ -45,12 +46,10 @@ public class GameServiceImpl implements GameService {
     public int updateGame(GameDTO gameDTO) {
         if (gameRepo.existsByName(gameDTO.getName())) {
             Game existingGame = gameRepo.findByName(gameDTO.getName());
-
             existingGame.setDescription(gameDTO.getDescription());
             existingGame.setGenre(gameDTO.getGenre());
             existingGame.setLogoUrl(gameDTO.getLogoUrl());
             existingGame.setPlatform(gameDTO.getPlatform());
-            existingGame.setIsActive(gameDTO.getIsActive());
 
             gameRepo.save(existingGame);
             return VarList.Created;
@@ -82,13 +81,28 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Object getGameByActive(String isActive) {
+    public Object getGameByActive() {
         try {
-            return gameRepo.findByIsActive(isActive);
+            List<Game> games = gameRepo.findByIsActive(true);
+            if (games.isEmpty()) {
+                return "No active games found";
+            } else {
+                return games;
+            }
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
+    }
+
+    @Override
+    public int setActiveTrue(String name) {
+      if (gameRepo.existsByName(name)) {
+          gameRepo.updateIsActiveTrue(name);
+          return VarList.Created;
+      } else {
+          return VarList.Not_Acceptable;
+      }
     }
 
 }
