@@ -16,5 +16,5 @@ public class GameDTO {
     private String genre;
     private String logoUrl;
     private String platform;
-    private String isActive;
+    private Boolean isActive;
 }
