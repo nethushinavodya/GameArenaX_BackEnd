@@ -93,12 +93,30 @@ public class GameController {
     }
 
     @GetMapping("/getByActive")
-    public ResponseEntity<ResponseDTO> getGameByActive(@RequestParam String isActive){
+    public ResponseEntity<ResponseDTO> getGameByActive(){
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", gameService.getGameByActive(isActive)));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", gameService.getGameByActive()));
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         } 
+    }
+
+    @PutMapping("/setActiveTrue")
+    public ResponseEntity<ResponseDTO> setActiveTrue(@RequestParam String name){
+        try {
+           int res = gameService.setActiveTrue(name);
+            switch (res){
+                case VarList.Created -> {
+                    return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", null));
+                }
+                default -> {
+                    return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new ResponseDTO(VarList.Bad_Request, "Error", null));
+                }
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }
