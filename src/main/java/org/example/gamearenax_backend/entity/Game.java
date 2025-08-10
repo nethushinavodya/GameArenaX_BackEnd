@@ -28,5 +28,5 @@ public class Game {
     @Column(name = "platform")
     private String platform;
     @Column(name = "is_active")
-    private String isActive;
+    private boolean isActive;
 }
