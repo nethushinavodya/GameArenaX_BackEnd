@@ -30,6 +30,11 @@ public class Player {
 
     private String imageUrl;
     private boolean isOnline;
+
+    public void setIsOnline(boolean isOnline) {
+        this.isOnline = isOnline;
+    }
+
     @Column(length = 1000)
     private String about;
 
