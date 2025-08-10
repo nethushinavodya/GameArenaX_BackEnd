@@ -1,5 +1,6 @@
 package org.example.gamearenax_backend.service.impl;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.example.gamearenax_backend.dto.PlayerDTO;
 import org.example.gamearenax_backend.entity.Player;
@@ -22,15 +23,22 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Autowired
     private ModelMapper modelMapper;
+    @PostConstruct
+    public void configureMapper() {
+        modelMapper.typeMap(PlayerDTO.class, Player.class)
+                .addMappings(mapper -> mapper.map(PlayerDTO::isOnline, Player::setIsOnline));
+    }
 
     @Autowired
     private PlayerRepo playerRepo;
     @Override
     public int addPlayer(PlayerDTO playerDTO, User user) {
         try {
+            System.out.println("isOnline: " + playerDTO.isOnline());
             if(userRepo.existsByEmail(playerDTO.getEmail())) {
                 Player player = modelMapper.map(playerDTO, Player.class);
                 player.setUser(user);
+                player.setIsOnline(playerDTO.isOnline());
                 playerRepo.save(player);
                 userRepo.updatePlayerRole(playerDTO.getEmail(), "Player");
                 return VarList.Created;
@@ -41,7 +49,6 @@ public class PlayerServiceImpl implements PlayerService {
             throw new RuntimeException(e.getMessage());
         }
     }
-
     @Override
     public Object getAllPlayers() {
         try {
@@ -55,7 +62,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public Object getByOnline() {
         try {
-            List<Player> players = playerRepo.findByOnline(true);
+            List<Player> players = playerRepo.findByIsOnline(true);
             if (players.isEmpty()) {
                 return "No players are online";
             } else {
