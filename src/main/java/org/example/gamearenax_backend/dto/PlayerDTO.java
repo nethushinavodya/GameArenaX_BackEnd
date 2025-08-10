@@ -24,4 +24,9 @@ public class PlayerDTO {
 
     private String status;
     private List<String> games;
+
+    public void setIsOnline(boolean isOnline) {
+        this.isOnline = isOnline;
+    }
+
 }
