@@ -11,5 +11,7 @@ import lombok.Setter;
 @Setter
 public class AuthDTO {
     private String email;
+    private String role;
     private String token;
+    private String username;
 }

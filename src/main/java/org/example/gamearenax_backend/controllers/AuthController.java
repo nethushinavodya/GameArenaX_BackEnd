@@ -1,6 +1,7 @@
 package org.example.gamearenax_backend.controllers;
 
 
+import jakarta.annotation.security.PermitAll;
 import jakarta.servlet.http.HttpServletRequest;
 import org.example.gamearenax_backend.dto.AuthDTO;
 import org.example.gamearenax_backend.dto.ResponseDTO;
@@ -35,9 +36,10 @@ public class AuthController {
     }
 
     @PostMapping("/authenticate")
+    @PermitAll
     public ResponseEntity<ResponseDTO> authenticate(@RequestBody UserDTO userDTO, HttpServletRequest request) {
-        System.out.println("jjjj");
         try {
+            System.out.println(userDTO.getPassword());
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userDTO.getEmail(), userDTO.getPassword()));
         } catch (Exception e) {
@@ -60,9 +62,13 @@ public class AuthController {
         AuthDTO authDTO = new AuthDTO();
         authDTO.setEmail(loadedUser.getEmail());
         authDTO.setToken(token);
+        authDTO.setRole(loadedUser.getRole());
+        authDTO.setUsername(loadedUser.getUsername());
+
 
         request.getSession().setAttribute("email", loadedUser.getEmail());
         request.getSession().setAttribute("role", loadedUser.getRole());
+        request.getSession().setAttribute("username", loadedUser.getUsername());
 
 
         return ResponseEntity.status(HttpStatus.CREATED)
