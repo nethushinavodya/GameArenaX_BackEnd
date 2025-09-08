@@ -10,9 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.beans.Transient;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -71,7 +69,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     @Transactional
-    public Object getGameByName(String name) {
+    public Game getGameByName(String name) {
         try {
             return gameRepo.findByName(name);
         } catch (RuntimeException e) {
