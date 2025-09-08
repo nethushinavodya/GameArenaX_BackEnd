@@ -1,6 +1,7 @@
 package org.example.gamearenax_backend.service.impl;
 
 import jakarta.transaction.Transactional;
+import org.example.gamearenax_backend.dto.OTPDetails;
 import org.example.gamearenax_backend.dto.UserDTO;
 import org.example.gamearenax_backend.entity.User;
 import org.example.gamearenax_backend.repository.UserRepo;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @Transactional
@@ -26,12 +28,18 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Autowired
     private UserRepo userRepo;
 
+    private ConcurrentHashMap<String, OTPDetails> otpMap = new ConcurrentHashMap<>();
+
     @Autowired
     private ModelMapper modelMapper;
     public int saveUser(UserDTO userDTO) {
         if (userRepo.existsByEmail(userDTO.getEmail())){
             return VarList.Not_Acceptable;
-        }else {
+        }
+        if (userRepo.existsByUsername(userDTO.getUsername())) {
+            return VarList.Conflict;
+        }
+        else {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             userRepo.save(modelMapper.map(userDTO, User.class));
@@ -76,7 +84,51 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         return userRepo.findByEmail(email);
     }
 
+    @Override
+    public boolean existsByUsername(String username) {
+        return userRepo.existsByUsername(username);
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return userRepo.existsByEmail(email);
+    }
+
+    @Override
+    public Object getAllAdminsAndUsers() {
+        List<User> users = userRepo.getAllAdminsAndUsers();
+        return modelMapper.map(users,new TypeToken<List<User>>(){}.getType());
+    }
+
     public boolean ifEmailExists(String email) {
         return userRepo.existsByEmail(email);
+    }
+
+    public void updatePassword(String email, String password) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        userRepo.updatePassword(passwordEncoder.encode(password), email);
+    }
+    public boolean verifyOTP(String email, int otp) {
+        if (!otpMap.containsKey(email)) return false;
+        OTPDetails details = otpMap.get(email);
+        if (System.currentTimeMillis() > details.getExpiryTime()) {
+            otpMap.remove(email);
+            return false;
+        }
+        boolean valid = details.getCode() == otp;
+        if (valid) otpMap.remove(email);
+        return valid;
+    }
+
+    public long getRemainingTime(String email) {
+        if (!otpMap.containsKey(email)) return 0;
+        long remaining = otpMap.get(email).getExpiryTime() - System.currentTimeMillis();
+        return Math.max(0, remaining);
+    }
+
+    public void saveOTP(String email, int code, int minutesValid) {
+        long expiryTime = System.currentTimeMillis() + minutesValid * 60 * 1000; // 10 minutes
+        otpMap.put(email, new OTPDetails(code, expiryTime));
+
     }
 }

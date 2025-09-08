@@ -11,4 +11,10 @@ public interface UserService {
     int updateUser(UserDTO userDTO);
 
     User SearchByEmail(String email);
+
+    boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
+
+    Object getAllAdminsAndUsers();
 }

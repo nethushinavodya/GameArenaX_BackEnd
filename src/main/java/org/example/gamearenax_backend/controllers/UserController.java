@@ -40,12 +40,17 @@ public class UserController {
                     AuthDTO authDTO = new AuthDTO();
                     authDTO.setEmail(userDTO.getEmail());
                     authDTO.setToken(token);
+                    authDTO.setUsername(userDTO.getUsername());
                     return ResponseEntity.status(HttpStatus.CREATED)
                             .body(new ResponseDTO(VarList.Created, " Success",authDTO));
                 }
                 case VarList.Not_Acceptable -> {
                     return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
                             .body(new ResponseDTO(VarList.Not_Acceptable, "Email Already Used",null));
+                }
+                case VarList.Conflict -> {
+                    return ResponseEntity.status(HttpStatus.CONFLICT)
+                            .body(new ResponseDTO(VarList.Conflict, "Username Already Used",null));
                 }
                 default -> {
                     return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
@@ -68,6 +73,7 @@ public class UserController {
             throw new RuntimeException(e.getMessage());
         }
     }
+     
     @PutMapping("/update")
     public ResponseEntity<ResponseDTO> updateUser(@RequestBody UserDTO userDTO){
         try {
@@ -81,6 +87,28 @@ public class UserController {
                     return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new ResponseDTO(VarList.Bad_Request, "Error", null));
                 }
             }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+    @GetMapping("/check-username")
+    public ResponseEntity<Boolean> checkUsername(@RequestParam String username) {
+        boolean exists = userService.existsByUsername(username);
+        return ResponseEntity.ok(exists);
+    }
+
+    @GetMapping("/check-email")
+    public ResponseEntity<Boolean> checkEmail(@RequestParam String email) {
+        boolean exists = userService.existsByEmail(email);
+        return ResponseEntity.ok(exists);
+    }
+
+    /*get user by role admin and user*/
+    @GetMapping("get-all-admins-and-users")
+    public ResponseEntity<ResponseDTO> getAllAdminsAndUsers() {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", userService.getAllAdminsAndUsers()));
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());

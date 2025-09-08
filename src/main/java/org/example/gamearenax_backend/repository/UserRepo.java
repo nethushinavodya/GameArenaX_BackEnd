@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -30,4 +31,13 @@ public interface UserRepo extends JpaRepository<User, UUID> {
     @Modifying
     @Query(value = "UPDATE User u SET u.role = 'Player' WHERE u.email = ?1", nativeQuery = true)
     void updatePlayerRole(String email, String player);
+
+    @Modifying
+    @Query(value = "UPDATE User u SET u.password = ?1 WHERE u.email = ?2", nativeQuery = true)
+    void updatePassword(String encode, String email);
+
+    boolean existsByUsername(String username);
+
+    @Query(value = "SELECT * FROM User u WHERE u.role = 'Admin' OR u.role = 'User'", nativeQuery = true)
+    List<User> getAllAdminsAndUsers();
 }
