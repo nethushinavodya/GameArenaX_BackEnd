@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -23,4 +24,6 @@ public interface ClanRepo extends JpaRepository<Clan, UUID> {
     @Modifying
     @Query(value = "UPDATE Clans c SET c.available_slots = c.available_slots + 1 WHERE c.id = ?1", nativeQuery = true)
     void increaseAvailableSlots(UUID uuid);
+
+    Optional<Clan> findByName(String clanName);
 }
