@@ -25,13 +25,15 @@ public class PasswordController {
     public ResponseEntity<ResponseDTO> sendOtp(@RequestBody Map<String, String> body) {
         try {
             String email = body.get("email");
-            System.out.println(email);
+            System.out.println(email + "email");
             boolean isExists = userServiceImpl.ifEmailExists(email);
             if (!isExists){
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
                         .body(new ResponseDTO(VarList.Not_Acceptable, "Email Not Found",null));
             }
             int code = (1000 + (int) (Math.random() * 9000));
+
+            userServiceImpl.saveOTP(email, code, 10);
 
             sendEmail(email, code);
 
@@ -89,5 +91,38 @@ public class PasswordController {
             }
         }).start();
     }
+    //password update
+    @PutMapping("/updatePassword")
+    public ResponseEntity<ResponseDTO> updatePassword(@RequestBody Map<String, String> body) {
+        try {
+            String email = body.get("email");
+            String password = body.get("password");
+            userServiceImpl.updatePassword(email, password);
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(VarList.OK, "Success", null));
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+    @PostMapping("/verifyOtp")
+    public ResponseEntity<ResponseDTO> verifyOtp(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        int otp = Integer.parseInt(body.get("otp"));
+
+        boolean isValid = userServiceImpl.verifyOTP(email, otp);
+        if (isValid) {
+            return ResponseEntity.ok(new ResponseDTO(VarList.OK, "OTP verified", null));
+        } else {
+            long remainingTime = userServiceImpl.getRemainingTime(email);
+            if (remainingTime == 0) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ResponseDTO(VarList.Not_Acceptable, "OTP expired", null));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ResponseDTO(VarList.Not_Acceptable, "Invalid OTP. Time left: " + remainingTime/1000 + "s", null));
+            }
+        }
+    }
 
 }
+
