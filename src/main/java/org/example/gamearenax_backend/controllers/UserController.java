@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("api/v1/user")
 @CrossOrigin
@@ -109,6 +111,46 @@ public class UserController {
     public ResponseEntity<ResponseDTO> getAllAdminsAndUsers() {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", userService.getAllAdminsAndUsers()));
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+    // Ban user (set status to deactivated)
+    @PutMapping("/ban")
+    public ResponseEntity<ResponseDTO> banUser(@RequestParam String email) {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ResponseDTO(VarList.Created, "User banned successfully", userService.deleteUser(email)));
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    // Unban user (set status to active)
+    @PutMapping("/unban")
+    public ResponseEntity<ResponseDTO> unbanUser(@RequestParam String email) {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ResponseDTO(VarList.Created, "User unbanned successfully", userService.activateUser(email)));
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<ResponseDTO> getUserByEmail(@RequestParam String email) {
+        try {
+            UserDTO user = userService.getUserByEmail(email);
+            if (user != null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseDTO(VarList.OK, "Success", user));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponseDTO(VarList.Not_Found, "User not found", null));
+            }
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());

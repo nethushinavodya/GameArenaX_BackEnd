@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -72,7 +73,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public int updateUser(UserDTO userDTO) {
        try {
            System.out.println(userDTO.getUsername() + " " + userDTO.getCountry() + " " + userDTO.getRole());
-           userRepo.updateUser(userDTO.getEmail(), userDTO.getRole(), userDTO.getCountry(),userDTO.getUsername());
+           userRepo.updateUser(userDTO.getEmail(), userDTO.getRole(), userDTO.getCountry(),userDTO.getProfilePicture(),userDTO.getUsername());
            return VarList.Created;
        }catch (Exception e){
            throw new RuntimeException(e.getMessage());
@@ -98,6 +99,44 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public Object getAllAdminsAndUsers() {
         List<User> users = userRepo.getAllAdminsAndUsers();
         return modelMapper.map(users,new TypeToken<List<User>>(){}.getType());
+    }
+
+    @Override
+    public Object deleteUser(String email) {
+        try {
+            if (userRepo.existsByEmail(email)){
+                userRepo.updateIsActive(email);
+                return VarList.Created;
+            }else {
+                return "User not found";
+            }
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public Object activateUser(String email) {
+        try {
+            if (userRepo.existsByEmail(email)){
+                userRepo.updateActiveUser(email);
+                return VarList.Created;
+            }else {
+                return "User not found";
+            }
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public UserDTO getUserByEmail(String email) {
+        try {
+            User user = userRepo.findByEmail(email);
+            return modelMapper.map(user,UserDTO.class);
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     public boolean ifEmailExists(String email) {
