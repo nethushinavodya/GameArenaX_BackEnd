@@ -48,4 +48,23 @@ public class AdminController {
         }
     }
 
+    @PostMapping("/updateAdmin")
+    public ResponseEntity<ResponseDTO> updateAdmin(@RequestBody UserDTO userDTO){
+        try {
+            int res = userService.updateUser(userDTO);
+            switch (res){
+                case VarList.Created -> {
+                    return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", null));
+                }
+                default -> {
+                    return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new ResponseDTO(VarList.Bad_Request, "Error", null));
+                }
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+
 }
