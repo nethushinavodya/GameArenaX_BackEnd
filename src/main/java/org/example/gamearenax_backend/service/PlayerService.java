@@ -17,4 +17,8 @@ public interface PlayerService {
     Object updateIsLive(String email);
 
     Object updateIsLiveFalse(String email);
+
+    Object banPlayer(String email);
+
+    Object unbanPlayer(String email);
 }

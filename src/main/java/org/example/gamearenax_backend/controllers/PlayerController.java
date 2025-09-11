@@ -147,4 +147,25 @@ public class PlayerController {
             throw new RuntimeException(e.getMessage());
         }
     }
+    /*ban*/
+    @PutMapping("/ban")
+    public ResponseEntity<ResponseDTO> banPlayer(@RequestParam String email){
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created,"Success",playerService.banPlayer(email)));
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    /*unban*/
+    @PutMapping("/unban")
+    public ResponseEntity<ResponseDTO> unbanPlayer(@RequestParam String email){
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created,"Success",playerService.unbanPlayer(email)));
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 }

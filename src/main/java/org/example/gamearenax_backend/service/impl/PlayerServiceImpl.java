@@ -125,4 +125,34 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
+    @Override
+    public Object banPlayer(String email) {
+        try {
+            if (playerRepo.existsByEmail(email)){
+                playerRepo.updateStatus(email);
+                return VarList.Created;
+            }else {
+                return "Player Not Found";
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public Object unbanPlayer(String email) {
+        try {
+            if (playerRepo.existsByEmail(email)){
+                playerRepo.updateStatusActive(email);
+                return VarList.Created;
+            }else {
+                return "Player Not Found";
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
 }

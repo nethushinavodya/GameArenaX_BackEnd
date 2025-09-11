@@ -30,4 +30,11 @@ public interface PlayerRepo extends JpaRepository<Player, UUID> {
     @Query(value = "UPDATE Player s SET s.is_online  = false WHERE s.email = ?1", nativeQuery = true)
     void updateIsLiveFalse(String email);
 
+    @Modifying
+    @Query(value = "UPDATE Player s SET s.status = 'Deactivated' WHERE s.email = ?1", nativeQuery = true)
+    void updateStatus(String email);
+
+    @Modifying
+    @Query(value = "UPDATE Player s SET s.status = 'Active' WHERE s.email = ?1", nativeQuery = true)
+    void updateStatusActive(String email);
 }
