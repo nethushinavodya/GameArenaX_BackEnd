@@ -1,6 +1,7 @@
 package org.example.gamearenax_backend.service;
 
 import org.example.gamearenax_backend.dto.PlayerDTO;
+import org.example.gamearenax_backend.dto.UserDTO;
 import org.example.gamearenax_backend.entity.User;
 
 public interface PlayerService {
@@ -21,4 +22,6 @@ public interface PlayerService {
     Object banPlayer(String email);
 
     Object unbanPlayer(String email);
+
+    Object getPlayerByUsername(String username);
 }

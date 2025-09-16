@@ -139,6 +139,16 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         }
     }
 
+    @Override
+    public UserDTO getUserByUsername(String username) {
+        try {
+            User user = userRepo.findByUsername(username);
+            return modelMapper.map(user,UserDTO.class);
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
     public boolean ifEmailExists(String email) {
         return userRepo.existsByEmail(email);
     }

@@ -77,7 +77,7 @@ public class TournamentController {
     @GetMapping("/getAllTournaments")
     public ResponseEntity<ResponseDTO> getAllTournaments() {
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", tournamentService.getAllTournaments()));
+            return ResponseEntity.ok(new ResponseDTO(VarList.Created, "Success", tournamentService.getAllTournaments()));
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());

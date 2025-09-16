@@ -1,6 +1,8 @@
 package org.example.gamearenax_backend.repository;
 
+import jakarta.transaction.Transactional;
 import org.example.gamearenax_backend.entity.Player;
+import org.example.gamearenax_backend.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,8 +19,9 @@ public interface PlayerRepo extends JpaRepository<Player, UUID> {
     Optional<Player> findByEmail(String email);
 
     @Modifying
-    @Query(value = "UPDATE Player p SET p.player_name = ?1, p.country = ?2, p.about = ?3, p.total_matches = ?4, p.wins = ?5, p.rank = ?6 WHERE p.email = ?7", nativeQuery = true)
-    void updatePlayer(String playerName, String country, String about, int totalMatches, int wins, String rank, String email);
+    @Transactional
+    @Query(value = "UPDATE Player p SET p.player_name = ?1, p.country = ?2, p.about = ?3, p.image_url = ?4 WHERE p.email = ?5", nativeQuery = true)
+    void updatePlayer(String playerName, String country, String about,String imageUrl, String email);
 
     boolean existsByEmail(String email);
 
@@ -37,4 +40,6 @@ public interface PlayerRepo extends JpaRepository<Player, UUID> {
     @Modifying
     @Query(value = "UPDATE Player s SET s.status = 'Active' WHERE s.email = ?1", nativeQuery = true)
     void updateStatusActive(String email);
+
+    List<Player> findByUserUsername(String username);
 }

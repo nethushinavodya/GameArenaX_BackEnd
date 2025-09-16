@@ -48,4 +48,8 @@ public class Player {
     @ElementCollection
     @CollectionTable(name = "player_game", joinColumns = @JoinColumn(name = "player_id"))
     private List<String> games;
+
+    public boolean getIsOnline() {
+        return isOnline;
+    }
 }

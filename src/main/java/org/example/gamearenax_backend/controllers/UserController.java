@@ -156,4 +156,20 @@ public class UserController {
             throw new RuntimeException(e.getMessage());
         }
     }
+    @GetMapping("get-by-username")
+    public ResponseEntity<ResponseDTO> getUserByUsername(@RequestParam String username) {
+        try {
+            UserDTO user = userService.getUserByUsername(username);
+            if (user != null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseDTO(VarList.OK, "Success", user));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponseDTO(VarList.Not_Found, "User not found", null));
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 }

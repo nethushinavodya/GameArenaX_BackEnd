@@ -17,7 +17,7 @@ public interface UserRepo extends JpaRepository<User, UUID> {
 
 
     @Modifying
-    @Query(value = "UPDATE User u SET  email = ?1, role = ?2, country = ?3, profile_picture = ?5 WHERE u.username = ?4", nativeQuery = true)
+    @Query(value = "UPDATE User u SET  email = ?1, role = ?2, country = ?3, profile_picture = ?4 WHERE u.username = ?5", nativeQuery = true)
     void updateUser(String email, String role, String country,String profilePicture, String username);
 
     @Modifying
@@ -48,4 +48,14 @@ public interface UserRepo extends JpaRepository<User, UUID> {
     @Modifying
     @Query(value = "UPDATE User u SET u.status = 'Active' WHERE u.email = ?1", nativeQuery = true)
     void updateActiveUser(String email);
+
+    User findByUsername(String username);
+
+    @Modifying
+    @Query(value = "UPDATE User u SET u.country = ?2 WHERE u.email = ?1", nativeQuery = true)
+    void updateCountry(String email, String country);
+
+    @Modifying
+    @Query(value = "UPDATE User u SET u.profile_picture = ?2 WHERE u.email = ?1", nativeQuery = true)
+    void updateImgUrl(String email, String imageUrl);
 }

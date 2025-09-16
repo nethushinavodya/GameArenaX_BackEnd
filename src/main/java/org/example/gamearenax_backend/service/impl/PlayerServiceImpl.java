@@ -3,6 +3,7 @@ package org.example.gamearenax_backend.service.impl;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import org.example.gamearenax_backend.dto.PlayerDTO;
+import org.example.gamearenax_backend.dto.UserDTO;
 import org.example.gamearenax_backend.entity.Player;
 import org.example.gamearenax_backend.entity.User;
 import org.example.gamearenax_backend.repository.PlayerRepo;
@@ -27,6 +28,9 @@ public class PlayerServiceImpl implements PlayerService {
     public void configureMapper() {
         modelMapper.typeMap(PlayerDTO.class, Player.class)
                 .addMappings(mapper -> mapper.map(PlayerDTO::isOnline, Player::setIsOnline));
+
+        modelMapper.typeMap(Player.class, PlayerDTO.class)
+                .addMappings(mapper -> mapper.map(Player::getIsOnline, PlayerDTO::setOnline));
     }
 
     @Autowired
@@ -87,7 +91,9 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public int updatePlayer(PlayerDTO playerDTO) {
         try {
-            playerRepo.updatePlayer(playerDTO.getPlayerName(), playerDTO.getCountry(), playerDTO.getAbout(),playerDTO.getTotalMatches(), playerDTO.getWins(), playerDTO.getRank(), playerDTO.getEmail());
+            playerRepo.updatePlayer(playerDTO.getPlayerName(), playerDTO.getCountry(), playerDTO.getAbout(),playerDTO.getImageUrl(), playerDTO.getEmail());
+            userRepo.updateCountry(playerDTO.getEmail(), playerDTO.getCountry());
+            userRepo.updateImgUrl(playerDTO.getEmail(), playerDTO.getImageUrl());
             return VarList.Created;
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -155,4 +161,20 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
+    @Override
+    public Object getPlayerByUsername(String username) {
+        try {
+            List<Player> players = playerRepo.findByUserUsername(username);
+            return players.stream()
+                    .map(player -> {
+                        PlayerDTO dto = modelMapper.map(player, PlayerDTO.class);
+                        dto.setIsOnline(player.getIsOnline()); // ✅ force correct value
+                        return dto;
+                    })
+                    .toList();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 }

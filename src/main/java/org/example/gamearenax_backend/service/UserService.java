@@ -25,4 +25,6 @@ public interface UserService {
     Object activateUser(String email);
 
     UserDTO getUserByEmail(String email);
+
+    UserDTO getUserByUsername(String username);
 }

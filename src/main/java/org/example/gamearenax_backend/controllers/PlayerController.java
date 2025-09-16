@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/player")
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class PlayerController {
 
     private final JwtUtil jwtUtil;
@@ -110,21 +110,40 @@ public class PlayerController {
         }
     }
 
+    @GetMapping("getByUsername")
+    public ResponseEntity<ResponseDTO> getPlayerByUsername(@RequestParam String username) {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", playerService.getPlayerByUsername(username)));
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
     @PutMapping("/updatePlayer")
     public ResponseEntity<ResponseDTO> updatePlayer(@RequestBody PlayerDTO playerDTO) {
         try {
             int res = playerService.updatePlayer(playerDTO);
-            switch (res) {
-                case VarList.Created -> {
-                    return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", null));
-                }
-                default -> {
-                    return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new ResponseDTO(VarList.Bad_Request, "Error", null));
-                }
+
+            if (res == VarList.Created) {
+                // Fetch updated player data (by email) and send it back
+                Object updatedPlayer = playerService.getPlayerByEmail(playerDTO.getEmail());
+
+                return ResponseEntity.ok(
+                        new ResponseDTO(
+                                VarList.Created,
+                                "Player updated successfully",
+                                updatedPlayer
+                        )
+                );
+            } else {
+                return ResponseEntity.badRequest()
+                        .body(new ResponseDTO(VarList.Bad_Request, "Update failed", null));
             }
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(VarList.Not_Acceptable, "Error: " + e.getMessage(), null));
         }
     }
 
