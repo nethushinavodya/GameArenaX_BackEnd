@@ -25,7 +25,7 @@ public class TournamentController {
 
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('Streamer') || hasAuthority('Admin')")
-    public ResponseEntity<ResponseDTO> addTournament(@RequestBody TournamentDTO tournamentDTO) {
+    public ResponseEntity<ResponseDTO> addTournament(@RequestBody TournamentDTO tournamentDTO , HttpServletRequest request) {
         try {
             Game game = gameService.getGameByName(tournamentDTO.getGameName());
             if (game == null) {
@@ -37,6 +37,8 @@ public class TournamentController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new ResponseDTO(VarList.Bad_Request, "Game is not active", null));
             }
+            String email = request.getSession().getAttribute("email").toString();
+            tournamentDTO.setStreamerEmail(email);
 
             int res = tournamentService.addTournament(tournamentDTO,game);
 
@@ -129,6 +131,17 @@ public class TournamentController {
     public ResponseEntity<ResponseDTO> updateRegistrationStatus(@RequestParam String tournamentId, @RequestParam String registrationStatus) {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", tournamentService.updateRegistrationStatus(tournamentId, registrationStatus)));
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @GetMapping("/getTournamentByStreamer")
+    public ResponseEntity<ResponseDTO> getTournamentByStreamer( HttpServletRequest request) {
+        try {
+            String email = request.getSession().getAttribute("email").toString();
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", tournamentService.getTournamentByStreamer(email)));
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());

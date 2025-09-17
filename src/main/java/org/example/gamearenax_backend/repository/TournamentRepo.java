@@ -1,5 +1,6 @@
 package org.example.gamearenax_backend.repository;
 
+import org.example.gamearenax_backend.entity.Streamer;
 import org.example.gamearenax_backend.entity.Tournament;
 import org.example.gamearenax_backend.entity.TournamentStatus;
 import org.example.gamearenax_backend.entity.TournamentType;
@@ -18,4 +19,6 @@ public interface TournamentRepo extends JpaRepository<Tournament, Long> {
     List<Tournament> findByStatus(TournamentStatus tournamentStatus);
 
     List<Tournament> findByType(TournamentType tournamentType);
+
+    List<Tournament> findAllByStreamer(Streamer streamer);
 }

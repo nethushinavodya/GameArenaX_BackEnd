@@ -52,4 +52,8 @@ public class Tournament {
 
     @Column(name = "max_participants", nullable = false)
     private int maxParticipants ;
+
+    @ManyToOne
+    @JoinColumn(name = "streamer_id")
+    private Streamer streamer;
 }

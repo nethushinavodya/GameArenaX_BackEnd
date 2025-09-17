@@ -55,7 +55,7 @@ public class StreamerServiceImpl implements StreamerService {
     @Override
     public int updateStreamer(StreamerDTO streamerDTO) {
         try {
-            streamerRepo.updateStreamer(streamerDTO.getCountry(),streamerDTO.getBio(),streamerDTO.getDisplayName(),streamerDTO.getPlatform(),streamerDTO.getStreamUrl(),streamerDTO.getEmail());
+            streamerRepo.updateStreamer(streamerDTO.getCountry(),streamerDTO.getBio(),streamerDTO.getDisplayName(),streamerDTO.getPlatform(),streamerDTO.getStreamUrl(),streamerDTO.getBannerImageUrl(),streamerDTO.getProfileImageUrl(),streamerDTO.getEmail());
             return VarList.Created;
         } catch (Exception e) {
             e.printStackTrace();

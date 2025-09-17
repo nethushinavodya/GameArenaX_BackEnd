@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/streamers")
+@CrossOrigin(origins = "*",allowedHeaders = "*")
 public class StreamerController {
 
     private final JwtUtil jwtUtil;

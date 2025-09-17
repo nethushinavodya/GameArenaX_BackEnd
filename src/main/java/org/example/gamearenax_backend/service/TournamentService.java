@@ -19,4 +19,6 @@ public interface TournamentService {
     Object getClanTournaments();
 
     Object updateRegistrationStatus(String tournamentId, String registrationStatus);
+
+    Object getTournamentByStreamer(String email);
 }

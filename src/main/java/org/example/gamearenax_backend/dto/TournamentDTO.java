@@ -23,4 +23,20 @@ public class TournamentDTO {
     private String status;
     private String type;
     private int maxParticipants;
+
+    private String StreamerEmail;
+
+
+    public TournamentDTO(Long id, String name, String description, String gameName, LocalDate startDate, LocalDate endDate, BigDecimal prizePool, String status, String type, int maxParticipants) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.gameName = gameName;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.prizePool = prizePool;
+        this.status = status;
+        this.type = type;
+        this.maxParticipants = maxParticipants;
+    }
 }

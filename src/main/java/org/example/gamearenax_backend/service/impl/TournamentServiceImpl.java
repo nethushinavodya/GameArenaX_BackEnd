@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.gamearenax_backend.dto.TournamentDTO;
 import org.example.gamearenax_backend.entity.*;
 import org.example.gamearenax_backend.repository.GameRepo;
+import org.example.gamearenax_backend.repository.StreamerRepo;
 import org.example.gamearenax_backend.repository.TournamentRepo;
 import org.example.gamearenax_backend.repository.UserRepo;
 import org.example.gamearenax_backend.service.GameService;
@@ -22,14 +23,16 @@ public class TournamentServiceImpl implements TournamentService {
     private final ModelMapper modelMapper;
     private final GameRepo gameRepo;
     private final GameService gameService;
+    private final StreamerRepo streamerRepo;
 
 
     @Override
     public int addTournament(TournamentDTO tournamentDTO,Game game) {
         try {
-
+            Streamer streamer = streamerRepo.getStreamersByEmail(tournamentDTO.getStreamerEmail());
             Tournament tournament = modelMapper.map(tournamentDTO, Tournament.class);
             tournament.setGame(game);
+            tournament.setStreamer(streamer);
             if (tournament.getStatus() == null) {
                 tournament.setStatus(TournamentStatus.UPCOMING);
             }
@@ -121,6 +124,17 @@ public class TournamentServiceImpl implements TournamentService {
             tournament.setRegistrationStatus(RegistrationStatus.valueOf(registrationStatus.toUpperCase()));
             tournamentRepo.save(tournament);
             return VarList.Created;
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public Object getTournamentByStreamer(String email) {
+        try {
+            Streamer streamer = streamerRepo.getStreamersByEmail(email);
+            return tournamentRepo.findAllByStreamer(streamer);
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
