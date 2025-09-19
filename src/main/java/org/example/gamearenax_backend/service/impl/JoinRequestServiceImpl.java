@@ -95,16 +95,12 @@ public class JoinRequestServiceImpl implements JoinRequestService {
             throw new RuntimeException(e);
         }
     }
-
     @Override
-    public List<JoinRequestDTO> getJoinRequestByClanId(String clanId) {
+    public List<JoinRequest> getJoinRequestByClanId(String clanId) {
         try {
             UUID clanUUID = UUID.fromString(clanId.trim());
             System.out.println(clanUUID + "clanUUID");
-            List<Object> joinRequests = joinRequestRepo.findByClanId(clanUUID);
-            return joinRequests.stream()
-                    .map(joinRequest -> modelMapper.map(joinRequest, JoinRequestDTO.class))
-                    .toList();
+            return joinRequestRepo.findByClanId(clanUUID);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

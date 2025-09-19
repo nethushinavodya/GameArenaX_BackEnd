@@ -10,6 +10,6 @@ import java.util.UUID;
 
 @Repository
 public interface JoinRequestRepo extends JpaRepository<JoinRequest, Long> {
-    List<Object> findByClanId(UUID uuid);
+    List<JoinRequest> findByClanId(UUID uuid);
 
 }
