@@ -74,5 +74,15 @@ public class ClanController {
                     .body(new ResponseDTO(VarList.Not_Acceptable, e.getMessage(), null));
         }
     }
+    //get isjoinedclan
+    @GetMapping("/isJoinedClan")
+    public ResponseEntity<ResponseDTO> isJoinedClan(@RequestParam String username) {
+        try {
+            return ResponseEntity.ok(new ResponseDTO(VarList.OK, "Clans retrieved successfully", clanService.isJoinedClan(username)));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest()
+                    .body(new ResponseDTO(VarList.Not_Acceptable, e.getMessage(), null));
+        }
+    }
 
 }

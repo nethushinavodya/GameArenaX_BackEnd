@@ -14,4 +14,7 @@ public interface ClanService {
     List<ClanDTO> getAllClansByRankingPointsAsc();
 
     ClanDTO getClanById(String id);
+
+    Object isJoinedClan(String username);
+
 }
