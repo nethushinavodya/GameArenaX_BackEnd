@@ -1,5 +1,6 @@
 package org.example.gamearenax_backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID playerId;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
