@@ -12,6 +12,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class UserDTO {
+    private UUID uuid;
     private String email;
     private String password;
     private String username;

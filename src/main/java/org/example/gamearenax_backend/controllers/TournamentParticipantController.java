@@ -6,10 +6,7 @@ import org.example.gamearenax_backend.dto.TournamentParticipantDTO;
 import org.example.gamearenax_backend.service.TournamentParticipantService;
 import org.example.gamearenax_backend.util.VarList;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/tournament-participant")
@@ -27,4 +24,31 @@ public class TournamentParticipantController {
                     .body(new ResponseDTO(VarList.Not_Acceptable, e.getMessage(), null));
         }
     }
+    /*get participants by tournament id*/
+    @GetMapping("/getParticipantsByTournamentId")
+    public ResponseEntity<ResponseDTO> getParticipantsByTournamentId(@RequestParam String tournamentId) {
+        try {
+            return ResponseEntity.ok(new ResponseDTO(VarList.OK, "Success", tournamentParticipantService.getParticipantsByTournamentId(tournamentId)));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest()
+                    .body(new ResponseDTO(VarList.Not_Acceptable, e.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/getTournamentsByPlayerEmail")
+    public ResponseEntity<ResponseDTO> getTournamentsByPlayerEmail(@RequestParam String playerEmail) {
+        if (playerEmail == null || playerEmail.isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body(new ResponseDTO(VarList.Not_Acceptable, "playerEmail is required", null));
+        }
+        try {
+            // Call service to get tournaments
+            Object tournaments = tournamentParticipantService.getTournamentsByPlayerEmail(playerEmail);
+            return ResponseEntity.ok(new ResponseDTO(VarList.OK, "Success", tournaments));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest()
+                    .body(new ResponseDTO(VarList.Not_Acceptable, e.getMessage(), null));
+        }
+    }
+
 }

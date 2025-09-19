@@ -140,4 +140,14 @@ public class TournamentServiceImpl implements TournamentService {
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    @Override
+    public Object getTournamentById(String id) {
+        try {
+            return tournamentRepo.findById(Long.parseLong(id)).orElseThrow(() -> new RuntimeException("Tournament not found"));
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 }

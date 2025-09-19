@@ -37,7 +37,7 @@ public class TournamentController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new ResponseDTO(VarList.Bad_Request, "Game is not active", null));
             }
-            String email = request.getSession().getAttribute("email").toString();
+            String email = tournamentDTO.getStreamerEmail();
             tournamentDTO.setStreamerEmail(email);
 
             int res = tournamentService.addTournament(tournamentDTO,game);
@@ -138,10 +138,22 @@ public class TournamentController {
     }
 
     @GetMapping("/getTournamentByStreamer")
-    public ResponseEntity<ResponseDTO> getTournamentByStreamer( HttpServletRequest request) {
+    public ResponseEntity<ResponseDTO> getTournamentByStreamer(@RequestParam String email) {
         try {
-            String email = request.getSession().getAttribute("email").toString();
-            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", tournamentService.getTournamentByStreamer(email)));
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ResponseDTO(VarList.Created, "Success", tournamentService.getTournamentByStreamer(email)));
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+//    get tournament by id
+    @GetMapping("/getTournamentById")
+    public ResponseEntity<ResponseDTO> getTournamentById(@RequestParam String id) {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ResponseDTO(VarList.Created, "Success", tournamentService.getTournamentById(id)));
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());

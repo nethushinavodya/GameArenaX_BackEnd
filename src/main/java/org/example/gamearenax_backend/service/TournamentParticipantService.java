@@ -5,4 +5,8 @@ import org.springframework.stereotype.Service;
 
 public interface TournamentParticipantService {
     TournamentParticipantDTO joinTournament(TournamentParticipantDTO tournamentParticipantDTO);
+
+    Object getParticipantsByTournamentId(String tournamentId);
+
+    Object getTournamentsByPlayerEmail(String playerEmail);
 }

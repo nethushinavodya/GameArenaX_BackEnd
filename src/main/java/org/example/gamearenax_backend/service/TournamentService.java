@@ -21,4 +21,6 @@ public interface TournamentService {
     Object updateRegistrationStatus(String tournamentId, String registrationStatus);
 
     Object getTournamentByStreamer(String email);
+
+    Object getTournamentById(String id);
 }

@@ -12,6 +12,8 @@ import org.example.gamearenax_backend.service.TournamentParticipantService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -90,4 +92,34 @@ public class TournamentParticipantServiceImpl implements TournamentParticipantSe
         response.setRemainingSlots(remainingSlots); 
         return response;
     }
+
+    @Override
+    public Object getParticipantsByTournamentId(String tournamentId) {
+        try {
+           List<TournamentParticipant> tournamentParticipants = tournamentParticipantRepo.findByTournamentId(Long.parseLong(tournamentId));
+           return tournamentParticipants.stream().map(participant -> modelMapper.map(participant, TournamentParticipantDTO.class)).toList();
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public Object getTournamentsByPlayerEmail(String playerEmail) {
+        try {
+            // Fetch all participant entries for the given player
+            List<TournamentParticipant> participants = tournamentParticipantRepo.findByPlayerEmail(playerEmail);
+
+            // Extract only the tournament IDs
+            List<Long> tournamentIds = participants.stream()
+                    .map(participant -> participant.getTournament().getId())
+                    .toList();
+
+            return tournamentIds;
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Error fetching tournaments: " + e.getMessage());
+        }
+    }
+
+
+
 }
