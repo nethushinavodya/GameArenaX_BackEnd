@@ -59,4 +59,8 @@ public interface UserRepo extends JpaRepository<User, UUID> {
     @Modifying
     @Query(value = "UPDATE User u SET u.email = ?1, u.country = ?2, u.profile_picture = ?3 WHERE u.username = ?4", nativeQuery = true)
     void updateUser(String email, String country, String profilePicture, String username);
+
+    @Modifying
+    @Query(value = "UPDATE User u SET u.profile_picture = ?2 WHERE u.email = ?1", nativeQuery = true)
+    void updateProfilePicture(String email, String imageUrl);
 }
