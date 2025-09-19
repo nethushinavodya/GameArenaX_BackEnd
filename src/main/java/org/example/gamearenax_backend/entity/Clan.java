@@ -29,6 +29,7 @@ public class Clan {
     @Column(nullable = false)
     private String email;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "leader_id", nullable = false)
     private Player leader;
