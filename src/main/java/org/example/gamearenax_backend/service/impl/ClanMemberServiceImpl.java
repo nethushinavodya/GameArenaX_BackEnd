@@ -2,13 +2,11 @@ package org.example.gamearenax_backend.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.example.gamearenax_backend.entity.Clan;
-import org.example.gamearenax_backend.entity.ClanMember;
-import org.example.gamearenax_backend.entity.MemberRole;
-import org.example.gamearenax_backend.entity.Player;
+import org.example.gamearenax_backend.entity.*;
 import org.example.gamearenax_backend.repository.ClanMemberRepo;
 import org.example.gamearenax_backend.repository.ClanRepo;
 import org.example.gamearenax_backend.repository.PlayerRepo;
+import org.example.gamearenax_backend.repository.UserRepo;
 import org.example.gamearenax_backend.service.ClanMemberService;
 import org.example.gamearenax_backend.util.VarList;
 import org.springframework.stereotype.Service;
@@ -24,10 +22,14 @@ public class ClanMemberServiceImpl implements ClanMemberService {
     private final ClanMemberRepo clanMemberRepository;
     private final PlayerRepo playerRepository;
     private final ClanRepo clanRepository;
+    private final UserRepo userRepo;
     @Override
     public int joinClan(String playerId, String clanId) {
         try {
-            Optional<Player> player = playerRepository.findById(UUID.fromString(playerId));
+            UUID playerUUID = UUID.fromString(playerId.trim());
+
+            System.out.println(playerId   + " service");
+            Optional<Player> player = playerRepository.findByUserId(playerUUID);
             System.out.println(player.get().getAbout());
             Optional<Clan> clan = clanRepository.findById(UUID.fromString(clanId));
 
@@ -70,6 +72,8 @@ public class ClanMemberServiceImpl implements ClanMemberService {
     @Override
     public Object leaveClan(String playerId, String clanId) {
         try {
+            System.out.println(playerId + " playerId");
+            System.out.println(clanId + " clanId");
             Optional<ClanMember> member = clanMemberRepository.findByPlayerIdAndClanId(UUID.fromString(playerId), UUID.fromString(clanId));
             clanMemberRepository.delete(member.get());
             clanRepository.increaseAvailableSlots(UUID.fromString(clanId));
@@ -78,5 +82,13 @@ public class ClanMemberServiceImpl implements ClanMemberService {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
+    }
+
+    @Override
+    public Object getCurrentMember(String userName) {
+        User user = userRepo.findByUsername(userName);
+        Optional<Player> player = playerRepository.findByUserId(user.getUuid());
+        Optional<ClanMember> member = clanMemberRepository.findByPlayer(player.get());
+        return member;
     }
 }

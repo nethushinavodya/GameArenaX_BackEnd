@@ -6,4 +6,6 @@ public interface ClanMemberService {
     Object updateRole(String playerId, String clanId, String role);
 
     Object leaveClan(String playerId, String clanId);
+
+    Object getCurrentMember(String userName);
 }

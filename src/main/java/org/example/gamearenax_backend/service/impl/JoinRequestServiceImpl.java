@@ -40,14 +40,18 @@ public class JoinRequestServiceImpl implements JoinRequestService {
     @Override
     public int createJoinRequest(JoinRequestDTO joinRequestDTO) {
         try {
-            Optional<Player> player = playerRepo.findById(UUID.fromString(joinRequestDTO.getPlayerId()));
+            Optional<Player> player = playerRepo.findByUserId(UUID.fromString(joinRequestDTO.getPlayerId()));
             Optional<Clan> clan = clanRepo.findById(UUID.fromString(joinRequestDTO.getClanId()));
+            System.out.println(player.get().getPlayerId() + " playerID");
+            System.out.println(clan.get().getId() + " clanID");
 
             JoinRequest joinRequest = new JoinRequest();
             joinRequest.setPlayer(player.get());
             joinRequest.setClan(clan.get());
             joinRequest.setMessage(joinRequestDTO.getMessage());
             joinRequest.setStatus(joinRequestDTO.getStatus());
+
+            System.out.println(joinRequest + " joinRequest");
             joinRequestRepo.save(joinRequest);
             return VarList.Created;
         } catch (Exception e) {

@@ -14,4 +14,5 @@ public interface JoinRequestService {
     Object deleteJoinRequest(String id);
 
     Object getJoinRequestByClanId(String clanId);
+
 }
