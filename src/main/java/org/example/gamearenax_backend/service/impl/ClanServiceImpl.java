@@ -12,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -68,11 +70,8 @@ public class ClanServiceImpl implements ClanService {
     }
 
     @Override
-    public List<ClanDTO> getAllClans() {
-        List<Clan> clans = clanRepository.findAll();
-        return clans.stream()
-                .map(clan -> modelMapper.map(clan, ClanDTO.class))
-                .toList();
+    public Object getAllClans() {
+        return clanRepository.findAll();
 
     }
 
@@ -92,6 +91,17 @@ public class ClanServiceImpl implements ClanService {
                 .toList();
     }
 
+    @Override
+    public ClanDTO getClanById(String id) {
+        try {
+            UUID uuid = UUID.fromString(id.trim());
+            Clan clan = clanRepository.findById(uuid)
+                    .orElseThrow(() -> new RuntimeException("Clan not found: " + id));
+            return modelMapper.map(clan, ClanDTO.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 }

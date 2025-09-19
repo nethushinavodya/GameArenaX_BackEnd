@@ -6,6 +6,7 @@ import org.example.gamearenax_backend.dto.ResponseDTO;
 import org.example.gamearenax_backend.service.ClanService;
 import org.example.gamearenax_backend.util.VarList;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,8 +31,8 @@ public class ClanController {
     @GetMapping("/getAll")
     public ResponseEntity<ResponseDTO> getAllClans() {
         try {
-            List<ClanDTO> clans = clanService.getAllClans();
-            return ResponseEntity.ok(new ResponseDTO(VarList.OK, "Clans retrieved successfully", clans));
+
+            return ResponseEntity.ok(new ResponseDTO(VarList.OK, "Clans retrieved successfully", clanService.getAllClans()));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest()
                     .body(new ResponseDTO(VarList.Not_Acceptable, e.getMessage(), null));
@@ -44,6 +45,18 @@ public class ClanController {
         try {
             List<ClanDTO> clans = clanService.getAllClansByOpen();
             return ResponseEntity.ok(new ResponseDTO(VarList.OK, "Clans retrieved successfully", clans));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest()
+                    .body(new ResponseDTO(VarList.Not_Acceptable, e.getMessage(), null));
+        }
+    }
+
+//    get clan by id
+    @GetMapping("/getById")
+    public ResponseEntity<ResponseDTO> getClanById(@RequestParam String id) {
+        try {
+            ClanDTO clan = clanService.getClanById(id);
+            return ResponseEntity.ok(new ResponseDTO(VarList.OK, "Clan retrieved successfully", clan));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest()
                     .body(new ResponseDTO(VarList.Not_Acceptable, e.getMessage(), null));
