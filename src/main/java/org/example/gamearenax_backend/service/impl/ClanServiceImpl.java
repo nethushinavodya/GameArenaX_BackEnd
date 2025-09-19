@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -103,5 +100,12 @@ public class ClanServiceImpl implements ClanService {
         }
     }
 
+    @Override
+    public Object isJoinedClan(String username) {
+        User user = userRepository.findByUsername(username);
+        Optional<Player> player = playerRepository.findByUserId(user.getUuid());
+        Optional<ClanMember> clanMember = clanMemberRepository.findByPlayer(player.get());
+        return clanMember;
+    }
 
 }
