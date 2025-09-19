@@ -49,11 +49,15 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        System.out.println(email + " lllllllll");
         User user = userRepo.findByEmail(email);
+        System.out.println(user + " lllllllll");
+        System.out.println(user.getRole() + "hhhhh");
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), getAuthority(user));
     }
 
     private Set<SimpleGrantedAuthority> getAuthority(User user) {
+        System.out.println(user.getRole());
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(user.getRole()));
         return authorities;
@@ -73,7 +77,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public int updateUser(UserDTO userDTO) {
        try {
            System.out.println(userDTO.getUsername() + " " + userDTO.getCountry() + " " + userDTO.getRole());
-           userRepo.updateUser(userDTO.getEmail(), userDTO.getRole(), userDTO.getCountry(),userDTO.getProfilePicture(),userDTO.getUsername());
+           userRepo.updateUser(userDTO.getEmail(), userDTO.getCountry(),userDTO.getProfilePicture(),userDTO.getUsername());
            return VarList.Created;
        }catch (Exception e){
            throw new RuntimeException(e.getMessage());

@@ -65,6 +65,7 @@ public class WebSecurityConfig {
                                 "/api/v1/streamers/getAll",
                                 "/api/v1/player/getAllPlayers",
                                 "/api/v1/tournament/getAllTournaments",
+                                "/api/v1/tournament/getUpcomingTournaments",
                                 "/api/v1/player/ban",
                                 "/api/v1/player/unban",
                                 "/api/v1/auth/verifyOTP",

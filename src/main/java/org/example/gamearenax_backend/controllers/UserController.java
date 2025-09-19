@@ -81,13 +81,12 @@ public class UserController {
         try {
             System.out.println(userDTO.getCountry() + " " + userDTO.getUsername());
             int res = userService.updateUser(userDTO);
-            switch (res){
-                case VarList.Created -> {
-                    return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", null));
-                }
-                default -> {
-                    return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new ResponseDTO(VarList.Bad_Request, "Error", null));
-                }
+
+            if(res == VarList.Created){
+                Object user = userService.getUserByUsername(userDTO.getUsername());
+                return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", user));
+            }else {
+                return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new ResponseDTO(VarList.Bad_Request, "Error", null));
             }
         } catch (RuntimeException e) {
             e.printStackTrace();
