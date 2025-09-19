@@ -63,7 +63,7 @@ public class JoinRequestServiceImpl implements JoinRequestService {
     @Override
     public int acceptJoinRequest(String id) {
         Optional<JoinRequest> joinRequest = joinRequestRepo.findById(Long.valueOf(id));
-
+        System.out.println("joinRequest: " + joinRequest);
         if (joinRequest.isPresent()) {
             joinRequestRepo.delete(joinRequest.get());
 
