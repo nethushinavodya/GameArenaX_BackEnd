@@ -42,4 +42,7 @@ public interface PlayerRepo extends JpaRepository<Player, UUID> {
     void updateStatusActive(String email);
 
     List<Player> findByUserUsername(String username);
+
+    @Query(value = "SELECT * FROM Player p WHERE p.user_id = ?1", nativeQuery = true)
+    Optional<Player> findByUserId(UUID uuid);
 }

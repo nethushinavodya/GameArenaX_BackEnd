@@ -11,7 +11,6 @@ public interface PlayerService {
 
     Object getByOnline();
 
-    Object getPlayerByEmail(String email);
 
     int updatePlayer(PlayerDTO playerDTO);
 
@@ -24,4 +23,6 @@ public interface PlayerService {
     Object unbanPlayer(String email);
 
     Object getPlayerByUsername(String username);
+
+    PlayerDTO getPlayerByEmail(String email);
 }

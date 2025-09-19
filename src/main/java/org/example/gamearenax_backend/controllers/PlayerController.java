@@ -103,10 +103,13 @@ public class PlayerController {
     @GetMapping("/getByEmail")
     public ResponseEntity<ResponseDTO> getPlayerByEmail(@RequestParam String email) {
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(VarList.Created, "Success", playerService.getPlayerByEmail(email)));
+            PlayerDTO dto = playerService.getPlayerByEmail(email); // returns DTO
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseDTO(VarList.OK, "Success", dto));
         } catch (RuntimeException e) {
             e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body(new ResponseDTO(VarList.Not_Acceptable, e.getMessage(), null));
         }
     }
 

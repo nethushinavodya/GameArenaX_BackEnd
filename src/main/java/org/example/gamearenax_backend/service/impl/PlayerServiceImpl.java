@@ -78,15 +78,6 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
-    @Override
-    public Object getPlayerByEmail(String email) {
-        try {
-            return playerRepo.findByEmail(email);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
-        }
-    }
 
     @Override
     public int updatePlayer(PlayerDTO playerDTO) {
@@ -177,4 +168,15 @@ public class PlayerServiceImpl implements PlayerService {
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    @Override
+    public PlayerDTO getPlayerByEmail(String email) {
+        Player player = playerRepo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Player not found"));
+
+        // Map Player entity to PlayerDTO
+        PlayerDTO dto = modelMapper.map(player, PlayerDTO.class);
+        return dto;
+    }
+
 }
