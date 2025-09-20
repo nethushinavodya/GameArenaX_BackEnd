@@ -45,6 +45,7 @@ public class PlayerServiceImpl implements PlayerService {
                 player.setIsOnline(playerDTO.isOnline());
                 playerRepo.save(player);
                 userRepo.updatePlayerRole(playerDTO.getEmail(), "Player");
+                userRepo.updateCountry(playerDTO.getEmail(), playerDTO.getCountry());
                 userRepo.updateProfilePicture(playerDTO.getEmail(), playerDTO.getImageUrl());
                 return VarList.Created;
             } else {

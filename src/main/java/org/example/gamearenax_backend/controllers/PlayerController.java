@@ -59,6 +59,7 @@ public class PlayerController {
 
         try {
             int res = playerService.addPlayer(playerDTO, user);
+            System.out.println("res: " + res);
             switch (res) {
                 case VarList.Created -> {
                     String token = jwtUtil.generateToken(modelMapper.map(user, UserDTO.class));
