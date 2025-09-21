@@ -23,4 +23,8 @@ public interface TournamentService {
     Object getTournamentByStreamer(String email);
 
     Object getTournamentById(String id);
+
+    Object getUpcomingTournamentsByEmail(String email);
+
+    Object startTournament(TournamentDTO tournamentDTO);
 }

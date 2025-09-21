@@ -21,4 +21,6 @@ public interface TournamentRepo extends JpaRepository<Tournament, Long> {
     List<Tournament> findByType(TournamentType tournamentType);
 
     List<Tournament> findAllByStreamer(Streamer streamer);
+
+    Object findAllByStreamerAndStatus(Streamer streamer, TournamentStatus tournamentStatus);
 }

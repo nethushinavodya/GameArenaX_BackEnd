@@ -39,4 +39,10 @@ public class TournamentDTO {
         this.type = type;
         this.maxParticipants = maxParticipants;
     }
+
+
+    public TournamentDTO(Long id, String streamerEmail) {
+        this.id = id;
+        this.StreamerEmail = streamerEmail;
+    }
 }

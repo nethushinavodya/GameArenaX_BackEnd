@@ -148,12 +148,36 @@ public class TournamentController {
         }
     }
 
-//    get tournament by id
+    //    get tournament by id
     @GetMapping("/getTournamentById")
     public ResponseEntity<ResponseDTO> getTournamentById(@RequestParam String id) {
         try {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new ResponseDTO(VarList.Created, "Success", tournamentService.getTournamentById(id)));
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    //get upcoming tournaments by StreamerId
+    @GetMapping("/getUpcomingTournamentsByStreamer")
+    public ResponseEntity<ResponseDTO> getUpcomingTournamentsByStreamer(@RequestParam String email) {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ResponseDTO(VarList.Created, "Success", tournamentService.getUpcomingTournamentsByEmail(email)));
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    //start tournament
+    @PostMapping("/startTournament")
+    public ResponseEntity<ResponseDTO> startTournament(@RequestBody TournamentDTO tournamentDTO) {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ResponseDTO(VarList.Created, "Success", tournamentService.startTournament(tournamentDTO)));
         } catch (RuntimeException e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());

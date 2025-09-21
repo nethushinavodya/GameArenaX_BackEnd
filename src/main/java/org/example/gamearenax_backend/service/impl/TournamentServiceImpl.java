@@ -14,6 +14,8 @@ import org.example.gamearenax_backend.util.VarList;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -150,4 +152,36 @@ public class TournamentServiceImpl implements TournamentService {
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    @Override
+    public Object getUpcomingTournamentsByEmail(String email) {
+        try {
+            Streamer streamer = streamerRepo.getStreamersByEmail(email);
+            return tournamentRepo.findAllByStreamerAndStatus(streamer, TournamentStatus.UPCOMING);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public Object startTournament(TournamentDTO tournamentDTO) {
+        try {
+            System.out.println(tournamentDTO.getId() + " kkkkk");
+            Tournament tournament = tournamentRepo.findById(tournamentDTO.getId())
+                    .orElseThrow(() -> new RuntimeException("Tournament not found"));
+            tournament.setStatus(TournamentStatus.ONGOING);
+            tournamentRepo.save(tournament);
+
+            Streamer streamer = streamerRepo.getStreamersByEmail(tournament.getStreamer().getEmail());
+            streamer.setIsLive(true);
+            streamer.setStreamUrl(tournamentDTO.getStreamerEmail());
+            return VarList.Created;
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+
 }
