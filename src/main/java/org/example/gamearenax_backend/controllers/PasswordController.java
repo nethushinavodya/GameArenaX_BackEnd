@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -48,16 +47,14 @@ public class PasswordController {
         new Thread(() -> {
             try {
                 String senderEmail = "nethushiperera03@gmail.com";
-                String senderPassword = "akhtgzikhibtvmdf"; // Replace with the app-specific password from Gmail
+                String senderPassword = "randojcqzyhukggt"; // Replace with the app-specific password from Gmail
 
                 String subject = "OTP Code from GameArenaX";
 
                 String body = "Dear User,\n\n" +
                         "Your OTP code for accessing GameArenaX services is: " + code + "\n\n" +
                         "Please use this code to verify your identity. The OTP is valid for 10 minutes only.\n" +
-                        "If you did not request this OTP, please ignore this email or contact support.\n\n" +
-                        "Best regards,\n" +
-                        "The SmallWorld Team";
+                        "If you did not request this OTP, please ignore this email or contact support.";
 
                 Properties properties = new Properties();
                 properties.put("mail.smtp.auth", "true");
