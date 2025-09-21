@@ -47,8 +47,7 @@ public class PasswordController {
         new Thread(() -> {
             try {
                 String senderEmail = "nethushiperera03@gmail.com";
-                String senderPassword = "randojcqzyhukggt"; // Replace with the app-specific password from Gmail
-
+                String senderPassword = "randojcqzyhukggt";
                 String subject = "OTP Code from GameArenaX";
 
                 String body = "Dear User,\n\n" +
