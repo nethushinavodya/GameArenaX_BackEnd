@@ -129,14 +129,19 @@ public class BracketService {
 
     @Transactional
     public BracketsDTO updateMatchResult(Long matchId, Long winnerId) {
+
+        System.out.println("match ID" + matchId + " winner ID" + winnerId  + "👻👻👻👻👻 ");
         Brackets match = bracketsRepository.findById(matchId)
                 .orElseThrow(() -> new IllegalArgumentException("Match not found: " + matchId));
 
         // Validate winner
         TournamentParticipant winner = null;
         if (match.getPlayerA() != null && match.getPlayerA().getId().equals(winnerId)) {
+            System.out.println("Player A is the winner");
+            System.out.println("Player A ID" + match.getPlayerA().getId()   +  "Winner ID is" + winnerId);
             winner = match.getPlayerA();
         } else if (match.getPlayerB() != null && match.getPlayerB().getId().equals(winnerId)) {
+            System.out.println("Player B ID" + match.getPlayerB().getId()   +  "Winner ID is" + winnerId);
             winner = match.getPlayerB();
         } else {
             throw new IllegalArgumentException("Winner must be one of the match participants");

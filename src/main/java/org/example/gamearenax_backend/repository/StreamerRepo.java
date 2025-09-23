@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface StreamerRepo extends JpaRepository<Streamer, String> {
@@ -30,4 +32,10 @@ public interface StreamerRepo extends JpaRepository<Streamer, String> {
     void updateIsLiveFalse(String email);
 
     Streamer getStreamersByEmail(String streamerEmail);
+
+    @Query(value = "SELECT * FROM Streamer s WHERE s.id = ?1", nativeQuery = true)
+    Streamer getStreamerBystreamerID(String streamerID);
+
+    @Query(value = "SELECT * FROM Streamer s WHERE s.id = ?1", nativeQuery = true)
+    Optional<Object> findByUuid(UUID uuid);
 }

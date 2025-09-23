@@ -176,6 +176,7 @@ public class TournamentServiceImpl implements TournamentService {
             Streamer streamer = streamerRepo.getStreamersByEmail(tournament.getStreamer().getEmail());
             streamer.setIsLive(true);
             streamer.setStreamUrl(tournamentDTO.getStreamerEmail());
+            streamerRepo.save(streamer);
             return VarList.Created;
         } catch (RuntimeException e) {
             e.printStackTrace();

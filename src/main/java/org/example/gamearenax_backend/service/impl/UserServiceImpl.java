@@ -180,7 +180,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     public void saveOTP(String email, int code, int minutesValid) {
-        long expiryTime = System.currentTimeMillis() + minutesValid * 60 * 1000; // 10 minutes
+        long expiryTime = System.currentTimeMillis() + minutesValid * 60 * 1000; // 5 minutes = 5 * 60 * 1000 ms
         otpMap.put(email, new OTPDetails(code, expiryTime));
 
     }

@@ -1,4 +1,3 @@
-
 // Updated Controller
 package org.example.gamearenax_backend.controllers;
 
@@ -23,7 +22,7 @@ public class BracketController {
         return ResponseEntity.ok(brackets);
     }
 
-    @GetMapping("/tournament/{tournamentId}")
+    @GetMapping("/getTournamentBrackets/{tournamentId}")
     public ResponseEntity<List<BracketsDTO>> getTournamentBracket(@PathVariable Long tournamentId) {
         List<BracketsDTO> brackets = bracketService.getTournamentBracket(tournamentId);
         return ResponseEntity.ok(brackets);
@@ -33,6 +32,7 @@ public class BracketController {
     public ResponseEntity<BracketsDTO> updateMatchResult(
             @PathVariable Long matchId,
             @RequestParam Long winnerId) {
+        System.out.println("matchId: " + matchId + " winnerId: " + winnerId);
         BracketsDTO updatedMatch = bracketService.updateMatchResult(matchId, winnerId);
         return ResponseEntity.ok(updatedMatch);
     }

@@ -48,16 +48,14 @@ public class PasswordController {
         new Thread(() -> {
             try {
                 String senderEmail = "nethushiperera03@gmail.com";
-                String senderPassword = "akhtgzikhibtvmdf"; // Replace with the app-specific password from Gmail
+                String senderPassword = "dviaizggvzqiodjr"; // Replace with the app-specific password from Gmail
 
                 String subject = "OTP Code from GameArenaX";
 
                 String body = "Dear User,\n\n" +
                         "Your OTP code for accessing GameArenaX services is: " + code + "\n\n" +
-                        "Please use this code to verify your identity. The OTP is valid for 10 minutes only.\n" +
-                        "If you did not request this OTP, please ignore this email or contact support.\n\n" +
-                        "Best regards,\n" +
-                        "The SmallWorld Team";
+                        "Please use this code to verify your identity. The OTP is valid for 5 minutes only.\n" +
+                        "If you did not request this OTP, please ignore this email or contact support.";
 
                 Properties properties = new Properties();
                 properties.put("mail.smtp.auth", "true");
